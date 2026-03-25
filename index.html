@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa Estelar — Un viaje entre dos cielos</title>
+  <meta name="description" content="Una experiencia inmersiva que conecta dos momentos en el universo a través de sus mapas estelares.">
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="loading-text">Preparando el universo</div>
+    <div class="loading-bar-container">
+      <div class="loading-bar" id="loading-bar"></div>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div id="progress-bar"></div>
+
+  <!-- Three.js Canvas -->
+  <div id="canvas-container"></div>
+
+  <!-- Vignette -->
+  <div class="vignette"></div>
+
+  <!-- Warp Overlay -->
+  <div id="warp-overlay"></div>
+
+  <!-- Connection Canvas -->
+  <canvas id="connection-canvas"></canvas>
+
+  <!-- Overlay Sections -->
+  <div id="overlay">
+    <!-- Section 0: Intro -->
+    <div class="section" id="section-intro">
+      <p class="text-epic" id="intro-text"></p>
+    </div>
+
+    <!-- Section 1: Approach -->
+    <div class="section" id="section-approach">
+      <p class="text-subtitle" id="approach-text" style="color: var(--color-muted); letter-spacing: 0.15em; text-transform: uppercase; font-size: 0.9rem;">Acércate al telescopio</p>
+    </div>
+
+    <!-- Section 2: Warp (tunnel travel with text) -->
+    <div class="section" id="section-warp">
+      <p class="text-epic" id="warp-text1" style="font-size: clamp(1rem, 2.5vw, 1.6rem); color: var(--color-muted);">Mirando a traves del telescopio...</p>
+      <p class="text-epic" id="warp-text2" style="font-size: clamp(1.2rem, 3vw, 2rem); margin-top: 1.5rem;">Dos cielos cuentan una historia</p>
+    </div>
+
+    <!-- Section 3: First Star Map -->
+    <div class="section" id="section-map1">
+      <h2 class="text-date" id="date1">11 de abril de 2003</h2>
+      <p class="text-subtitle" id="subtitle1">El cielo la noche que nacio Juan</p>
+      <div class="star-map-container" id="map1-container">
+        <div class="star-map-glow"></div>
+        <img src="assets/abril.png" alt="Mapa estelar - 11 de abril de 2003" class="star-map-img" id="map1-img" loading="lazy">
+        <svg class="constellation-svg" id="constellation1" viewBox="0 0 100 100">
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <!-- Aries constellation - diagonal line: 41 Ari, Hamal, Sheratan, Mesarthim -->
+          <!-- Mesarthim (bottom-right, smallest) -->
+          <circle cx="68" cy="58" r="1.5"/>
+          <!-- Sheratan (center-right, medium) -->
+          <circle cx="55" cy="48" r="1.8"/>
+          <!-- Hamal (center, brightest) -->
+          <circle cx="40" cy="40" r="2.8"/>
+          <!-- 41 Ari (top-left) -->
+          <circle cx="22" cy="28" r="1.5"/>
+          <!-- Lines: straight line through all 4 stars -->
+          <line x1="22" y1="28" x2="40" y2="40"/>
+          <line x1="40" y1="40" x2="55" y2="48"/>
+          <line x1="55" y1="48" x2="68" y2="58"/>
+          <!-- Label -->
+          <text x="50" y="75" text-anchor="middle" fill="rgba(125,211,252,0.35)" font-family="Space Grotesk, sans-serif" font-size="4.5" letter-spacing="0.2em">ARIES</text>
+        </svg>
+      </div>
+      <p class="text-poetic" id="poetic1">Esa noche, bajo Aries, el universo encendia una llama inquieta y apasionada. Sin saberlo, las estrellas ya trazaban el camino hacia alguien.</p>
+    </div>
+
+    <!-- Section 4: Transition -->
+    <div class="section" id="section-transition">
+      <p class="text-epic" id="transition-text" style="font-size: clamp(1rem, 2vw, 1.5rem); color: var(--color-muted);">Dos anos despues, en otro lugar del mundo...</p>
+    </div>
+
+    <!-- Section 5: Second Star Map -->
+    <div class="section" id="section-map2">
+      <h2 class="text-date" id="date2" style="background: linear-gradient(135deg, var(--color-accent-violet), #e879f9); -webkit-background-clip: text; background-clip: text;">21 de agosto de 2005</h2>
+      <p class="text-subtitle" id="subtitle2">El cielo la noche que nacio Mafe</p>
+      <div class="star-map-container" id="map2-container">
+        <div class="star-map-glow violet"></div>
+        <img src="assets/agosto.png" alt="Mapa estelar - 21 de agosto de 2005" class="star-map-img" id="map2-img" loading="lazy">
+        <svg class="constellation-svg" id="constellation2" viewBox="0 0 100 100">
+          <defs>
+            <filter id="glow2">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <!-- Leo constellation - sickle head + triangle body -->
+          <!-- Regulus (bottom of sickle, brightest) -->
+          <circle cx="60" cy="68" r="2.8" style="fill: #c084fc; filter: url(#glow2)"/>
+          <!-- Eta Leo (sickle curve) -->
+          <circle cx="55" cy="55" r="1.3" style="fill: #c084fc; filter: url(#glow2)"/>
+          <!-- Algieba (sickle curve) -->
+          <circle cx="55" cy="44" r="1.7" style="fill: #c084fc; filter: url(#glow2)"/>
+          <!-- Adhafera (sickle curve) -->
+          <circle cx="60" cy="35" r="1.4" style="fill: #c084fc; filter: url(#glow2)"/>
+          <!-- Ras Elased (top of sickle) -->
+          <circle cx="68" cy="28" r="1.6" style="fill: #c084fc; filter: url(#glow2)"/>
+          <!-- Chertan (body bottom) -->
+          <circle cx="42" cy="60" r="1.5" style="fill: #c084fc; filter: url(#glow2)"/>
+          <!-- Zosma (body top) -->
+          <circle cx="35" cy="45" r="1.5" style="fill: #c084fc; filter: url(#glow2)"/>
+          <!-- Denebola (tail, far left) -->
+          <circle cx="22" cy="48" r="1.8" style="fill: #c084fc; filter: url(#glow2)"/>
+          <!-- Sickle: Regulus -> Eta -> Algieba -> Adhafera -> Ras Elased -->
+          <line x1="60" y1="68" x2="55" y2="55" style="stroke: rgba(192,132,252,0.4)"/>
+          <line x1="55" y1="55" x2="55" y2="44" style="stroke: rgba(192,132,252,0.4)"/>
+          <line x1="55" y1="44" x2="60" y2="35" style="stroke: rgba(192,132,252,0.4)"/>
+          <line x1="60" y1="35" x2="68" y2="28" style="stroke: rgba(192,132,252,0.4)"/>
+          <!-- Body triangle: Regulus -> Chertan -> Zosma -> Denebola -->
+          <line x1="60" y1="68" x2="42" y2="60" style="stroke: rgba(192,132,252,0.4)"/>
+          <line x1="42" y1="60" x2="35" y2="45" style="stroke: rgba(192,132,252,0.4)"/>
+          <line x1="35" y1="45" x2="22" y2="48" style="stroke: rgba(192,132,252,0.4)"/>
+          <!-- Connect body to sickle: Zosma -> Algieba -->
+          <line x1="35" y1="45" x2="55" y2="44" style="stroke: rgba(192,132,252,0.4)"/>
+          <!-- Label -->
+          <text x="50" y="85" text-anchor="middle" fill="rgba(192,132,252,0.35)" font-family="Space Grotesk, sans-serif" font-size="4.5" letter-spacing="0.2em">LEO</text>
+        </svg>
+      </div>
+      <p class="text-poetic" id="poetic2">Bajo Leo, el cosmos escribia luz y calidez. Otra alma llegaba al mundo, sin saber que alguien ya la estaba esperando entre las estrellas.</p>
+    </div>
+
+    <!-- Section 6: Final Connection -->
+    <div class="section" id="section-final">
+      <div class="dual-maps" id="dual-maps">
+        <div class="star-map-container" id="final-map1">
+          <div class="star-map-glow"></div>
+          <img src="assets/abril.png" alt="Abril 2003" class="star-map-img" id="final-img1" loading="lazy">
+        </div>
+        <div class="star-map-container" id="final-map2">
+          <div class="star-map-glow violet"></div>
+          <img src="assets/agosto.png" alt="Agosto 2005" class="star-map-img" id="final-img2" loading="lazy">
+        </div>
+      </div>
+      <p class="text-epic" id="final-text1">Dos cielos distintos, dos historias separadas...</p>
+      <p class="text-epic" id="final-text2" style="margin-top: 0.5rem;">Pero el mismo universo que conspiro para unirlos</p>
+      <p class="text-date" id="final-text3" style="margin-top: 1rem; font-size: clamp(1.2rem, 3vw, 2.2rem);">Juan y Mafe</p>
+      <p class="text-epic" id="final-text4" style="margin-top: 0.3rem; font-size: clamp(0.85rem, 1.8vw, 1.1rem); color: var(--color-muted);">Escritos en las estrellas desde el principio</p>
+      <!-- Download buttons -->
+      <div class="download-buttons" id="download-buttons">
+        <button class="download-btn" id="dl-aries" title="Descargar mapa de Juan">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Juan
+        </button>
+        <button class="download-btn" id="dl-leo" title="Descargar mapa de Mafe">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Mafe
+        </button>
+        <button class="download-btn accent" id="dl-juntos" title="Descargar ambos juntos">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Juntos
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Hint -->
+  <div class="scroll-hint" id="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+
+  <!-- Audio Toggle -->
+  <button id="audio-toggle" title="Sonido">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+      <path class="bar" d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+      <path class="bar" d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+    </svg>
+  </button>
+
+  <!-- WebGL Fallback -->
+  <div id="fallback">
+    <div class="fallback-content">
+      <h1 class="text-epic">Mapa Estelar</h1>
+      <p class="text-subtitle" style="margin: 2rem 0;">Hay momentos en el universo que marcan destinos...</p>
+      <h2 class="text-date">11 de abril de 2003</h2>
+      <img src="assets/abril.png" alt="Mapa estelar abril 2003">
+      <p class="text-poetic">Un cielo que marcó el inicio de una historia</p>
+      <h2 class="text-date" style="margin-top: 4rem;">21 de agosto de 2005</h2>
+      <img src="assets/agosto.png" alt="Mapa estelar agosto 2005">
+      <p class="text-poetic">Otro cielo, otra historia… destinada a cruzarse</p>
+      <h2 class="text-date" style="margin-top: 4rem;">Destinados a encontrarse</h2>
+    </div>
+  </div>
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- App Modules -->
+  <script src="js/audio.js"></script>
+  <script src="js/stars.js"></script>
+  <script src="js/scene.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
